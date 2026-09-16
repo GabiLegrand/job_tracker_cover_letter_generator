@@ -11,4 +11,4 @@ dist/
 pg_data/
 .idea/
 .vscode/
-backend/data/*
+backend/data*
