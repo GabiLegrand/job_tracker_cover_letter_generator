@@ -14,9 +14,10 @@ services:
       timeout: 5s
       retries: 10
     ports:
-      - "5432:5432"
-
-  backend:
+      - "${COVER_PG_PUBLIC_PORT}:5432"
+    networks:
+      - job_tracking
+  letter-backend:
     build: ./backend
     restart: unless-stopped
     depends_on:
@@ -31,14 +32,21 @@ services:
     volumes:
       - ./backend/app:/app/app
       - ./backend/alembic:/app/alembic
-      - /home/gabi/job_search/resilent_data/data:/app/data:ro
+      - ${CV_DATA_PATH}:/app/data:ro
     ports:
-      - "8000:8000"
-
-  frontend:
+      - "${API_COVER_PUBLIC_PORT}:8000"
+    networks:
+      - job_tracking
+  letter-frontend:
     build: ./frontend
     restart: unless-stopped
     depends_on:
-      - backend
+      - letter-backend
     ports:
-      - "5173:80"
+      - "${COVER_FE_PUBLIC_PORT}:80"
+    networks:
+      - job_tracking
+networks:
+  job_tracking:
+    external: true
+    name: job_tracking
