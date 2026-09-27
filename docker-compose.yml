@@ -3,11 +3,11 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: coverletter
-      POSTGRES_PASSWORD: coverletter
-      POSTGRES_DB: coverletter
+      POSTGRES_USER: "${LETTER_POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${LETTER_POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${LETTER_POSTGRES_DB}"
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - ${LETTER_PG_DATA_PATH}:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U coverletter -d coverletter"]
       interval: 5s
